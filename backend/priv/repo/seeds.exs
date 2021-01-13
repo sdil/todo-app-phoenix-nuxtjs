@@ -9,3 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias Backend.Repo
+alias Backend.Todos.Todo
+
+Repo.insert!(%Todo{title: "Milk the cow", done: false})
+Repo.insert!(%Todo{title: "Buy flowers", done: false})

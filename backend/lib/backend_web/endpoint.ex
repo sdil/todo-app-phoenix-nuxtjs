@@ -7,7 +7,7 @@ defmodule BackendWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_backend_key",
-    signing_salt: "te17teqx"
+    signing_salt: "3Rrcw9JP"
   ]
 
   socket "/socket", BackendWeb.UserSocket,
@@ -29,8 +29,6 @@ defmodule BackendWeb.Endpoint do
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
-    socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
-    plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
     plug Phoenix.Ecto.CheckRepoStatus, otp_app: :backend
   end
@@ -50,5 +48,6 @@ defmodule BackendWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug CORSPlug
   plug BackendWeb.Router
 end

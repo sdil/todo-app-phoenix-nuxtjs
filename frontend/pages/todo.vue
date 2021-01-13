@@ -11,14 +11,18 @@ export default {
     return {
       todos: [
         {
-          id: 1,
-          title: "milk the cow",
+          id: null,
+          title: null,
         },
       ],
     };
   },
   created() {
     // request to API server for list of items
+    this.$axios.get("http://localhost:4000/api/todos").then(response => {
+      console.log(response.data.data)
+      this.todos = response.data.data
+    })
   }
 };
 </script>

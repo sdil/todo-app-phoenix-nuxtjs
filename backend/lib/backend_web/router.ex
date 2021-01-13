@@ -1,28 +1,16 @@
 defmodule BackendWeb.Router do
   use BackendWeb, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug
   end
 
-  scope "/", BackendWeb do
-    pipe_through :browser
+  scope "/api", BackendWeb do
+    pipe_through [:api]
 
-    get "/", PageController, :index
+    resources "/todos", TodoController
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", BackendWeb do
-  #   pipe_through :api
-  # end
 
   # Enables LiveDashboard only for development
   #
@@ -35,8 +23,9 @@ defmodule BackendWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
+      pipe_through [:fetch_session, :protect_from_forgery]
       live_dashboard "/dashboard", metrics: BackendWeb.Telemetry
     end
+
   end
 end
