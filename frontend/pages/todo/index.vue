@@ -43,17 +43,17 @@ export default {
   },
   async fetch() {
     // request to API server for list of items
-    await this.$axios.get("http://localhost:4000/api/todos").then((response) => {
+    await this.$axios.get("api/todos").then((response) => {
       this.todos = response.data.data;
     });
   },
   methods: {
     async CreateTodo() {
-      await this.$axios.post("http://localhost:4000/api/todos", {
+      await this.$axios.post("api/todos", {
         todo: this.todo,
       });
       await this.$axios
-        .get("http://localhost:4000/api/todos")
+        .get("api/todos")
         .then((response) => {
           this.todos = response.data.data;
         });
@@ -61,7 +61,7 @@ export default {
     },
     async UpdateStatus(index, todo, done) {
       const updated_todo = await this.$axios
-        .patch("http://localhost:4000/api/todos/" + todo.id, {
+        .patch("api/todos/" + todo.id, {
           todo: { done: done },
         })
         .then((response) => response.data.data)

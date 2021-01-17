@@ -7,6 +7,7 @@ COPY . .
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
+RUN mix deps.get
 RUN mix phx.gen.secret
 
 ENV MIX_ENV=prod

@@ -7,6 +7,7 @@ start-dev:
 	mix phx.server
 
 start-prod:
+	docker-compose build
 	docker-compose down
 	docker-compose up -d
 	docker-compose exec web mix ecto.create

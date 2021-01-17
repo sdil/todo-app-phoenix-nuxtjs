@@ -21,14 +21,14 @@ export default {
   async fetch() {
     // request to API server for list of items
     const todo = await this.$axios
-      .get("http://localhost:4000/api/todos/" + this.$route.params.id)
+      .get("api/todos/" + this.$route.params.id)
 
     this.todo = todo.data.data;
   },
   methods: {
     async EditTodo(todo) {
       await this.$axios
-        .put("http://localhost:4000/api/todos/" + todo.id, {
+        .put("api/todos/" + todo.id, {
           todo: { title: this.new_todo.title, done: this.todo.done },
         })
         .then((response) => {
@@ -36,7 +36,7 @@ export default {
         });
     },
     async DeleteTodo(todo) {
-      await this.$axios.delete("http://localhost:4000/api/todos/" + todo.id);
+      await this.$axios.delete("api/todos/" + todo.id);
       await this.$router.push("/todo");
     },
   },
