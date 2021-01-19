@@ -19,6 +19,11 @@ config :backend, BackendWeb.Endpoint,
   pubsub_server: Backend.PubSub,
   live_view: [signing_salt: "7ipujKpK"]
 
+# Pow settings
+config :backend, :pow,
+  user: Backend.Users.User,
+  repo: Backend.Repo
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

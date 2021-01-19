@@ -44,7 +44,8 @@ defmodule Backend.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:ecto_psql_extras, "~> 0.2"},
-      {:cors_plug, "~> 2.0"}
+      {:cors_plug, "~> 2.0"},
+      {:pow, "~> 1.0"}
     ]
   end
 

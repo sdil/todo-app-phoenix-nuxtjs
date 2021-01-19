@@ -4,10 +4,30 @@ defmodule BackendWeb.Router do
   pipeline :api do
     plug :accepts, ["json"]
     plug CORSPlug
+    plug BackendWeb.ApiAuthPlug, otp_app: :backend
+  end
+
+  pipeline :api_protected do
+    plug Pow.Plug.RequireAuthenticated, error_handler: BackendWeb.ApiAuthErrorHandler
   end
 
   scope "/api", BackendWeb do
+    pipe_through :api
+
+    resources "/registration", RegistrationController, singleton: true, only: [:create]
+    resources "/session", SessionController, singleton: true, only: [:create, :delete]
+    post "/session/renew", SessionController, :renew
+  end
+
+
+  scope "/api", BackendWeb do
     pipe_through [:api]
+
+    resources "/todos", TodoController
+  end
+
+  scope "/api-protected", BackendWeb do
+    pipe_through [:api, :api_protected]
 
     resources "/todos", TodoController
   end
