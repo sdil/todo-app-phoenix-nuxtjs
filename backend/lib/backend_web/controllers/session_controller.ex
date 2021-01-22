@@ -3,6 +3,7 @@ defmodule BackendWeb.SessionController do
 
   alias BackendWeb.ApiAuthPlug
   alias Plug.Conn
+  require Logger
 
   @spec create(Conn.t(), map()) :: Conn.t()
   def create(conn, %{"user" => user_params}) do
@@ -10,7 +11,12 @@ defmodule BackendWeb.SessionController do
     |> Pow.Plug.authenticate_user(user_params)
     |> case do
       {:ok, conn} ->
-        json(conn, %{data: %{access_token: conn.private[:api_access_token], renewal_token: conn.private[:api_renewal_token]}})
+        json(conn, %{
+          data: %{
+            access_token: conn.private[:api_access_token],
+            renewal_token: conn.private[:api_renewal_token]
+          }
+        })
 
       {:error, conn} ->
         conn
@@ -19,12 +25,13 @@ defmodule BackendWeb.SessionController do
     end
   end
 
-  @spec renew(Conn.t(), map()) :: Conn.t()
-  def renew(conn, _params) do
+  @spec create(Conn.t(), map()) :: Conn.t()
+  def create(conn, %{"refresh_token" => refresh_token}) do
     config = Pow.Plug.fetch_config(conn)
+    Logger.debug("#{refresh_token}")
 
     conn
-    |> APIAuthPlug.renew(config)
+    |> ApiAuthPlug.renew(config, refresh_token)
     |> case do
       {conn, nil} ->
         conn
@@ -32,7 +39,12 @@ defmodule BackendWeb.SessionController do
         |> json(%{error: %{status: 401, message: "Invalid token"}})
 
       {conn, _user} ->
-        json(conn, %{data: %{access_token: conn.private[:api_access_token], renewal_token: conn.private[:api_renewal_token]}})
+        json(conn, %{
+          data: %{
+            access_token: conn.private[:api_access_token],
+            renewal_token: conn.private[:api_renewal_token]
+          }
+        })
     end
   end
 

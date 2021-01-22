@@ -8,6 +8,7 @@ defmodule BackendWeb.ApiAuthPlug do
   alias Plug.Conn
   alias Pow.{Config, Plug, Store.CredentialsCache}
   alias PowPersistentSession.Store.PersistentSessionCache
+  require Logger
 
   @doc """
   Fetches the user from access token.
@@ -78,12 +79,12 @@ defmodule BackendWeb.ApiAuthPlug do
   token metadata. The renewal token will be deleted from the store after the
   it has been fetched.
   """
-  @spec renew(Conn.t(), Config.t()) :: {Conn.t(), map() | nil}
-  def renew(conn, config) do
+  # @spec renew(Conn.t(), Config.t()) :: {Conn.t(), map() | nil}
+  def renew(conn, config, refresh_token) do
     store_config = store_config(config)
+    Logger.info("renewing api auth plug")
 
-    with {:ok, signed_token} <- fetch_access_token(conn),
-         {:ok, token}        <- verify_token(conn, signed_token, config),
+    with {:ok, token}        <- verify_token(conn, refresh_token, config),
          {clauses, metadata} <- PersistentSessionCache.get(store_config, token) do
 
       CredentialsCache.delete(store_config, metadata[:access_token])
@@ -109,6 +110,7 @@ defmodule BackendWeb.ApiAuthPlug do
   defp signing_salt(), do: Atom.to_string(__MODULE__)
 
   defp fetch_access_token(conn) do
+    Logger.info("fetching access token")
     case Conn.get_req_header(conn, "authorization") do
       [token | _rest] -> {:ok, token}
       _any            -> :error

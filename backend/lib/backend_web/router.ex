@@ -1,5 +1,6 @@
 defmodule BackendWeb.Router do
   use BackendWeb, :router
+  # use Pow.Phoenix.Router
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -16,7 +17,6 @@ defmodule BackendWeb.Router do
 
     resources "/registration", RegistrationController, singleton: true, only: [:create]
     resources "/session", SessionController, singleton: true, only: [:create, :delete]
-    post "/session/renew", SessionController, :renew
   end
 
 

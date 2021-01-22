@@ -18,4 +18,7 @@ new-todo:
 	curl -i localhost:4000/api/todos -d '{"todo":{"title": "test", "done": false}}' -X POST -H "Content-type: application/json"
 
 new-user:
-	curl -i localhost:4000/api/registration -X POST -d '{"user": {"email":"test@asdsf.com", "password":"test", "confirm_password": "test"}}' -H "Content-type: application/json"
+	curl -i localhost:4000/api/registration -X POST -d '{"user": {"email":"test@asdsf.com", "password":"test123456789", "confirm_password": "test123456789"}}' -H "Content-type: application/json"
+
+get_token:
+	curl -i localhost:4000/api/session -X POST -d '{"user": {"email":"test@asdsf.com", "password":"test123456789"}}' -H "Content-type: application/json"
